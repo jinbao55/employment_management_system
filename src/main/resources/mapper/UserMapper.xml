@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.GUFL_kongliang.mapper.UserMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.GUFL_kongliang.entity.User" id="userMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="loginName" column="login_name"/>
+        <result property="password" column="password"/>
+        <result property="type" column="type"/>
+        <result property="imgUrl" column="img_url"/>
+        <result property="tel" column="tel"/>
+        <result property="college" column="college"/>
+        <result property="classNo" column="class_no"/>
+        <result property="post" column="post"/>
+        <result property="state" column="state"/>
+        <result property="loginHost" column="login_host"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, name, login_name, password, type, img_url, tel, college, class_no, post, state, login_host
+    </sql>
+
+    <select id="getList" resultMap="userMap" parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from
+        user
+        <where>
+        <if test="id != null and id != ''">
+            and id = #{id}
+        </if>
+        <if test="name != null and name != ''">
+            and name = #{name}
+        </if>
+        <if test="loginName != null and loginName != ''">
+            and login_name = #{loginName}
+        </if>
+        <if test="password != null and password != ''">
+            and password = #{password}
+        </if>
+        <if test="type != null and type != ''">
+            and type = #{type}
+        </if>
+        <if test="imgUrl != null and imgUrl != ''">
+            and img_url = #{imgUrl}
+        </if>
+        <if test="tel != null and tel != ''">
+            and tel = #{tel}
+        </if>
+        <if test="college != null and college != ''">
+            and college = #{college}
+        </if>
+        <if test="classNo != null and classNo != ''">
+            and class_no = #{classNo}
+        </if>
+        <if test="post != null and post != ''">
+            and post = #{post}
+        </if>
+        <if test="state != null and state != ''">
+            and state = #{state}
+        </if>
+        <if test="loginHost != null and loginHost != ''">
+            and login_host = #{loginHost}
+        </if>
+        </where>
+        order by crt_time desc
+    </select>
+
+</mapper>

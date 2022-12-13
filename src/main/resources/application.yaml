@@ -1,0 +1,26 @@
+server:
+  port: 8005
+
+spring:
+  application:
+    name: GUFL_kongliang
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://134.175.220.159:3306/kl_dev
+    username: root
+    password: klklKL889
+  profiles:
+    active: dev
+  redis:
+    host: 134.175.220.159
+    port: 6379
+    password: klklKL889
+    database: 0
+
+
+
+#mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath:src/main/resources/mapper/**Mapper.xml
+  typeAliasesPackage: com.GUFL_kongliang.entity
