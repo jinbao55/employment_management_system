@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.GUFL_kongliang.mapper.RecruitmentInformationMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.GUFL_kongliang.entity.RecruitmentInformation" id="recruitmentInformationMap">
+        <result property="title" column="title"/>
+        <result property="crtTime" column="crt_time"/>
+        <result property="company" column="company"/>
+        <result property="scale" column="scale"/>
+        <result property="industry" column="industry"/>
+        <result property="position" column="position"/>
+        <result property="mail" column="mail"/>
+        <result property="peopleNum" column="people_num"/>
+        <result property="state" column="state"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        title, crt_time, company, scale, industry, position, mail, people_num, state
+    </sql>
+
+
+</mapper>

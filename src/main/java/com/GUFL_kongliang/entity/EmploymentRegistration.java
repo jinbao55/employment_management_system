@@ -13,8 +13,7 @@ import javax.persistence.*;
 /**
  * 就业登记表
  * 
- * @author muyuan
- * @email dev@muyuanfoods.com
+ * @author 孔量
  * @date 2022-12-13 01:31:52
  */
 @Table(name = "employment_registration")
