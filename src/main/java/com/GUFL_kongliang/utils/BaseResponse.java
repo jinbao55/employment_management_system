@@ -1,6 +1,9 @@
 package com.GUFL_kongliang.utils;
 
 
+import com.GUFL_kongliang.entity.RecruitmentInformation;
+
+import java.util.List;
 /**
  * 公共响应类
  * @param <T>
@@ -20,7 +23,6 @@ public class BaseResponse<T> {
         this.setMsg(msg);
         this.setData(data);
     }
-
     public static <T> BaseResponse<T> success() {
         return new BaseResponse<T>(CODE_SUCCESS, "success", null);
     }

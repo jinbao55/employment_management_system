@@ -7,6 +7,7 @@ import com.GUFL_kongliang.utils.BaseResponse;
 import com.GUFL_kongliang.utils.RedisUtils;
 import com.GUFL_kongliang.utils.UUIDUtils;
 import com.alibaba.druid.util.StringUtils;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -98,6 +99,14 @@ public class UserController {
         } else {
             return new BaseResponse<>(500, "false", "修改失败");
         }
+    }
+
+
+    @PostMapping("getPageList")
+    public BaseResponse getPageList(@RequestBody User entity) {
+        com.github.pagehelper.Page<Object> result = PageHelper.startPage(entity.getPage() == null ? 1 : entity.getPage(), entity.getLimit() == null ? 10 : entity.getLimit());
+        List<User> pageList = userBiz.getPageList(entity);
+        return new BaseResponse<>(200, String.valueOf(result.getTotal()), pageList);
     }
 
 

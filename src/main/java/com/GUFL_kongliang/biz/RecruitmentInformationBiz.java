@@ -1,19 +1,18 @@
 package com.GUFL_kongliang.biz;
 
-import com.GUFL_kongliang.entity.EmploymentRegistration;
 import com.GUFL_kongliang.entity.RecruitmentInformation;
 import com.GUFL_kongliang.mapper.RecruitmentInformationMapper;
 import com.GUFL_kongliang.utils.RedisUtils;
 import com.GUFL_kongliang.utils.UUIDUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -99,45 +98,39 @@ public class RecruitmentInformationBiz extends ServiceImpl<RecruitmentInformatio
      * @param: entity
      * @Return: Page<RecruitmentInformation>
     */
-    public Page<RecruitmentInformation> getPageList(RecruitmentInformation entity) {
-
+    public List<RecruitmentInformation> getPageList(RecruitmentInformation entity) {
         boolean flag = false;
-
-        if (entity.getPage() == 1 &&
-                entity.getLimit() == 10 &&
+        if (1 == entity.getPage() &&
+                10 == entity.getLimit() &&
                 entity.getPosition() == null &&
                 entity.getCompany() == null) {
             flag = true;
         }
-
         //获取缓存数据
         if (flag) {
             Object value = redisUtils.getValue(key);
             if (value != null) {
                 log.info("---------------没查数据库-----------------------");
-                return (Page<RecruitmentInformation>) value;
+                return (List<RecruitmentInformation>) value;
             }
         }
         String position = entity.getPosition();
         String company = entity.getCompany();
-        //分页参数
-        Page<RecruitmentInformation> rowPage = new Page(entity.getPage(), entity.getLimit());
         QueryWrapper<RecruitmentInformation> wrapper = new QueryWrapper<>();
-        wrapper.orderByDesc("crt_time");
         if (StringUtils.isNotBlank(position)) {
             wrapper.like("position", "%" + position + "%");
         }
         if (StringUtils.isNotBlank(company)) {
             wrapper.like("company", "%" + company + "%");
         }
-        Page<RecruitmentInformation> page = this.baseMapper.selectPage(rowPage, wrapper);
-
+        wrapper.orderByDesc("crt_time");
+        List<RecruitmentInformation> recruitmentInformations = baseMapper.selectList(wrapper);
 
         log.info("--------，，，，，，，，，查数据库了，，，，，，，----------");
         //缓存数据
         if (flag) {
-            redisUtils.setValue(key, page, 7000, TimeUnit.HOURS);
+            redisUtils.setValue(key, recruitmentInformations, 7000, TimeUnit.HOURS);
         }
-        return page;
+        return recruitmentInformations;
     }
 }

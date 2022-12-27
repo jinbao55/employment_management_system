@@ -4,12 +4,15 @@ package com.GUFL_kongliang.rest;
 import com.GUFL_kongliang.biz.RecruitmentInformationBiz;
 import com.GUFL_kongliang.entity.RecruitmentInformation;
 import com.GUFL_kongliang.utils.BaseResponse;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 /**
  * 招聘信息
@@ -91,9 +94,10 @@ public class RecruitmentInformationController{
      * @Return: BaseResponse<Page<EmploymentRegistration>>
      */
     @PostMapping("getPageList")
-    public BaseResponse<Page<RecruitmentInformation>> getPageList(@RequestBody RecruitmentInformation dto) {
-        Page<RecruitmentInformation> page = recruitmentInformationBiz.getPageList(dto);
-        return  new BaseResponse<>(200, "Success", page);
+    public BaseResponse <List<RecruitmentInformation>> getPageList(@RequestBody RecruitmentInformation dto) {//
+        Page<Object> result = PageHelper.startPage(dto.getPage() == null ? 1 : dto.getPage(), dto.getLimit() == null ? 10 : dto.getLimit());
+        List<RecruitmentInformation> page = recruitmentInformationBiz.getPageList(dto);
+        return  new BaseResponse<>(500, String.valueOf(result.getTotal()), page);
     }
 
 }

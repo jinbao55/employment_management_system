@@ -1,18 +1,22 @@
 package com.GUFL_kongliang.biz;
 
+import com.GUFL_kongliang.entity.RecruitmentInformation;
 import com.GUFL_kongliang.entity.User;
 import com.GUFL_kongliang.handler.NingException;
 import com.GUFL_kongliang.mapper.UserMapper;
 import com.GUFL_kongliang.utils.Md5Utils;
 import com.GUFL_kongliang.utils.RedisUtils;
 import com.GUFL_kongliang.utils.UUIDUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,6 +42,7 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
      */
     public boolean addUser(User user) {
         user.setId(UUIDUtils.getUUID());
+        user.setCrtTime(new Date());
         user.setPassword(Md5Utils.md5Password(user.getPassword()));
         boolean save = save(user);
         return save;
@@ -110,4 +115,27 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
         user.setPassword(Md5Utils.md5Password(user.getNewPassword()));
         return updateById(user);
     }
+
+
+    /**
+     * @Desc: 获取用户列表
+     * @Auther: 孔量
+     * @Date: 2022/12/27 9:06
+     * @param: entity
+     * @Return: List<User>
+     */
+    public List<User> getPageList(User entity) {
+        String name = entity.getName();
+        String tel = entity.getTel();
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        if (StringUtils.isNotBlank(name)) {
+            wrapper.like("name", "%" + name + "%");
+        }
+        if (StringUtils.isNotBlank(tel)) {
+            wrapper.like("tel", "%" + tel + "%");
+        }
+        wrapper.orderByDesc("crt_time");
+        return this.baseMapper.selectList(wrapper);
+    }
+
 }

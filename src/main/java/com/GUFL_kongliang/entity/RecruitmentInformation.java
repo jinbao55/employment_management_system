@@ -85,11 +85,11 @@ public class RecruitmentInformation implements Serializable {
     /***********************************************拓展字段***********************************************************/
 
     @Transient
-    private transient int page;
+    private transient Integer page;
 
 
     @Transient
-    private transient int limit;
+    private transient Integer limit;
 	
 
 }

@@ -1,6 +1,7 @@
 package com.GUFL_kongliang.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +11,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import javax.persistence.Table;
 import java.io.Serializable;
-
+import java.util.Date;
 
 
 /**
@@ -88,6 +89,18 @@ public class User implements Serializable {
     private String loginHost;
 
 
+
+    //是否删除 1是 0不是
+
+    @TableLogic
+    @Column(name = "deleted")
+    private Integer deleted;
+
+
+
+    @Column(name = "crt_time")
+    private Date crtTime;
+
 //************************************拓展字段****************************************************
 
 
@@ -101,4 +114,10 @@ public class User implements Serializable {
     private transient  String newPasswordRe;
 
 
+    @Transient
+    private transient Integer page;
+
+
+    @Transient
+    private transient Integer limit;
 }
