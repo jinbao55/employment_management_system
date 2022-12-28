@@ -106,7 +106,7 @@ public class UserController {
     public BaseResponse getPageList(@RequestBody User entity) {
         com.github.pagehelper.Page<Object> result = PageHelper.startPage(entity.getPage() == null ? 1 : entity.getPage(), entity.getLimit() == null ? 10 : entity.getLimit());
         List<User> pageList = userBiz.getPageList(entity);
-        return new BaseResponse<>(200, String.valueOf(result.getTotal()), pageList);
+        return new BaseResponse<>((int) result.getTotal(), "200", pageList);
     }
 
 

@@ -78,7 +78,7 @@ public class User implements Serializable {
     @Column(name = "post")
     private String post;
 	
-	  //账号状态
+	  //账号状态 1正常  2锁定
 
     @Column(name = "state")
     private String state;

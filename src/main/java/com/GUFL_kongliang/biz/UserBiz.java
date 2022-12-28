@@ -127,9 +127,13 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
     public List<User> getPageList(User entity) {
         String name = entity.getName();
         String tel = entity.getTel();
+        String state = entity.getState();
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(name)) {
             wrapper.like("name", "%" + name + "%");
+        }
+        if (StringUtils.isNotBlank(state)) {
+            wrapper.like("state", "%" + state + "%");
         }
         if (StringUtils.isNotBlank(tel)) {
             wrapper.like("tel", "%" + tel + "%");
