@@ -3,7 +3,6 @@ package com.GUFL_kongliang.rest;
 
 import com.GUFL_kongliang.biz.PostInformationBiz;
 import com.GUFL_kongliang.entity.PostInformation;
-import com.GUFL_kongliang.entity.RecruitmentInformation;
 import com.GUFL_kongliang.utils.BaseResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
