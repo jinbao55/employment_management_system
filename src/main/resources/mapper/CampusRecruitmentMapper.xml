@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.GUFL_kongliang.mapper.CampusRecruitmentMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.GUFL_kongliang.entity.CampusRecruitment" id="campusRecruitmentMap">
+        <result property="id" column="id"/>
+        <result property="lectureTheme" column="lecture_theme"/>
+        <result property="lectureTime" column="lecture_time"/>
+        <result property="company" column="company"/>
+        <result property="place" column="place"/>
+        <result property="teacher" column="teacher"/>
+        <result property="companyType" column="company_type"/>
+        <result property="industry" column="industry"/>
+        <result property="workLocation" column="work_location"/>
+        <result property="companyMail" column="company_mail"/>
+        <result property="deleted" column="deleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, lecture_theme, lecture_time, company, place, teacher, company_type, industry, work_location, company_mail, deleted
+    </sql>
+
+    <select id="getList" resultMap="campusRecruitmentMap" parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from
+        campus_recruitment
+        <where>
+        <if test="id != null and id != ''">
+            and id = #{id}
+        </if>
+        <if test="lectureTheme != null and lectureTheme != ''">
+            and lecture_theme = #{lectureTheme}
+        </if>
+        <if test="lectureTime != null and lectureTime != ''">
+            and lecture_time = #{lectureTime}
+        </if>
+        <if test="company != null and company != ''">
+            and company = #{company}
+        </if>
+        <if test="place != null and place != ''">
+            and place = #{place}
+        </if>
+        <if test="teacher != null and teacher != ''">
+            and teacher = #{teacher}
+        </if>
+        <if test="companyType != null and companyType != ''">
+            and company_type = #{companyType}
+        </if>
+        <if test="industry != null and industry != ''">
+            and industry = #{industry}
+        </if>
+        <if test="workLocation != null and workLocation != ''">
+            and work_location = #{workLocation}
+        </if>
+        <if test="companyMail != null and companyMail != ''">
+            and company_mail = #{companyMail}
+        </if>
+        <if test="deleted != null and deleted != ''">
+            and deleted = #{deleted}
+        </if>
+        </where>
+        order by crt_time desc
+    </select>
+
+</mapper>
