@@ -59,7 +59,7 @@ public class RecruitController {
 
 
     /**
-     * @Desc: 增加或修改
+     * @Desc: 删除
      * @Auther: 孔量
      * @Date: 2022/12/28 14:48
      * @param: entity

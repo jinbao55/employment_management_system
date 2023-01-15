@@ -3,6 +3,7 @@ package com.GUFL_kongliang.biz;
 import com.GUFL_kongliang.entity.PostInformation;
 import com.GUFL_kongliang.entity.Recruit;
 import com.GUFL_kongliang.mapper.RecruitMapper;
+import com.GUFL_kongliang.utils.UUIDUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -64,6 +65,7 @@ public class RecruitBiz extends ServiceImpl<RecruitMapper, Recruit> {
 
         if(StringUtils.isBlank(id)){
             //添加
+            entity.setId(UUIDUtils.getUUID());
             entity.setDate(new Date());
             baseMapper.insert(entity);
         }else {

@@ -22,7 +22,7 @@ spring:
 
 #mybatis-plus
 mybatis-plus:
-  mapper-locations: classpath:src/main/resources/mapper/**Mapper.xml
+  mapper-locations: classpath:mapper/*.xml
   typeAliasesPackage: com.GUFL_kongliang.entity
   global-config:
     db-config:
