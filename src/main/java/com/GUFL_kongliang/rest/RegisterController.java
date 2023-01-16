@@ -9,6 +9,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -78,10 +79,18 @@ public class RegisterController{
 
 
 
-    @GetMapping("getPageLista")
-    public BaseResponse<List<Register>> getPag6List() {
-        registerBiz.addList();
-        return  new BaseResponse<>(200, "200", null);
+    /**
+     * @Desc: 手写分页
+     * @Auther: 孔量
+     * @Date: 2023/1/16 9:40
+     * @param: entity
+     * @Return: BaseResponse<List<Register>>
+    */
+    @PostMapping("getPageLista")
+    public BaseResponse<List<Register>> getPagLista(@RequestBody Register entity) {
+        HashMap<String, Object> pageLista = registerBiz.getPageLista(entity);
+        List<Register> list = (List<Register>) pageLista.get("list");
+        return  new BaseResponse<>((Integer) pageLista.get("tol"), "200", list);
     }
 
 

@@ -4,6 +4,7 @@ import com.GUFL_kongliang.entity.Register;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -17,4 +18,12 @@ public interface RegisterMapper extends BaseMapper<Register> {
     void insertList(List<Register> list);
 
     Register selectByIda(String id);
+
+
+    Integer count(HashMap selectMap);
+
+
+    List<String> selecyId(HashMap selectMap);
+
+    List<Register> selecyIdList(List<String> idList);
 }

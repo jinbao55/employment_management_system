@@ -3,7 +3,7 @@
 
 <mapper namespace="com.GUFL_kongliang.mapper.RegisterMapper">
 
-	<!-- 可根据自己的需求 是否要使用 -->
+    <!-- 可根据自己的需求 是否要使用 -->
     <resultMap type="com.GUFL_kongliang.entity.Register" id="registerMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
@@ -21,34 +21,82 @@
         <result property="workCities" column="work_cities"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, sno, college, major, class_no, graduation_year, is_work, employment_company, Jobs, work_type, pay, deleted, work_cities
+        id, name, sno, college, major, class_no, graduation_year, is_work, employment_company, Jobs, work_type, pay,
+        deleted, work_cities
     </sql>
 
 
+    <select id="count" resultType="java.lang.Integer">
+        select count(id) from register where
+        deleted = 0
+        <if test="sampleName != null and sampleName != ''">
+            and college=#{college}
+        </if>
+        <if test="sampleName != null and sampleName != ''">
+            and work_type=#{workType}
+        </if>
+        <if test="sampleName != null and sampleName != ''">
+            and major=#{major}
+        </if>
+        <if test="sampleName != null and sampleName != ''">
+            and work_cities=#{workCities}
+        </if>
+    </select>
 
+
+    <select id="selecyId" resultType="java.lang.String">
+        select id from register
+        where
+        deleted = 0
+        <if test="sampleName != null and sampleName != ''">
+            and college=#{college}
+        </if>
+        <if test="sampleName != null and sampleName != ''">
+            and work_type=#{workType}
+        </if>
+        <if test="sampleName != null and sampleName != ''">
+            and major=#{major}
+        </if>
+        <if test="sampleName != null and sampleName != ''">
+            and work_cities=#{workCities}
+        </if>
+        ORDER BY graduation_year DESC
+        <if test="limit != null and limit != '' ">
+            limit #{page} , #{limit}
+        </if>
+    </select>
+
+    <select id="selecyIdList" resultType="com.GUFL_kongliang.entity.Register">
+        select <include refid="Base_Column_List"/>
+        from register
+        where id in
+            <foreach collection="idList" item="id" index="i" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+    </select>
 
     <select id="selectByIda" resultType="com.GUFL_kongliang.entity.Register">
         select * from register where id=#{id}
     </select>
 
 
-   <insert id="insertList" parameterType="java.util.List">
-       insert into register (id,
-                             name,
-                             sno,
-                             college,
-                             major,
-                             class_no,
-                             graduation_year,
-                             is_work,
-                             employment_company,
-                             jobs,
-                             work_type,
-                             pay,
-                             deleted,
-                             work_cities) values
-       <foreach collection="list" item="item" separator=",">
-           <![CDATA[ (
+    <insert id="insertList" parameterType="java.util.List">
+        insert into register (id,
+        name,
+        sno,
+        college,
+        major,
+        class_no,
+        graduation_year,
+        is_work,
+        employment_company,
+        jobs,
+        work_type,
+        pay,
+        deleted,
+        work_cities) values
+        <foreach collection="list" item="item" separator=",">
+            <![CDATA[ (
          #{item.id},
          #{item.name},
          #{item.sno},
@@ -63,7 +111,7 @@
          #{item.pay} ,
          #{item.deleted},
          #{item.workCities}) ]]>
-       </foreach>
-   </insert>
+        </foreach>
+    </insert>
 
 </mapper>
