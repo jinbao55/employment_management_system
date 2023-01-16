@@ -93,6 +93,11 @@ public class RegisterController{
         return  new BaseResponse<>((Integer) pageLista.get("tol"), "200", list);
     }
 
+    @GetMapping("add")
+    public void getPagLista() {
+        registerBiz.addList();
+    }
+
 
 
 }
