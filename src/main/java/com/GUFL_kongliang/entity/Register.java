@@ -28,7 +28,7 @@ public class Register implements Serializable {
 	
 	  //id
     @Id
-    private Long id;
+    private String id;
 	
 	  //姓名
 

@@ -29,54 +29,70 @@
     <select id="count" resultType="java.lang.Integer">
         select count(id) from register where
         deleted = 0
-        <if test="sampleName != null and sampleName != ''">
+        <if test="college != null and college != ''">
             and college=#{college}
         </if>
-        <if test="sampleName != null and sampleName != ''">
+        <if test="workType != null and workType != ''">
             and work_type=#{workType}
         </if>
-        <if test="sampleName != null and sampleName != ''">
-            and major=#{major}
+        <if test="major != null and major != ''">
+            and major like #{major}"%"
         </if>
-        <if test="sampleName != null and sampleName != ''">
-            and work_cities=#{workCities}
+        <if test="workCities != null and workCities != ''">
+            and work_cities like #{workCities}"%"
+        </if>
+        <if test="graduationYear != null and graduationYear != ''">
+            and graduation_year = #{graduationYear}
+        </if>
+        <if test="graduationYear != null and graduationYear != ''">
+            and graduation_year = #{graduationYear}
         </if>
     </select>
 
 
-    <select id="selecyId" resultType="java.lang.String">
+    <select id="selecyId" resultType="java.lang.String" parameterType="java.util.HashMap">
         select id from register
         where
         deleted = 0
-        <if test="sampleName != null and sampleName != ''">
+        <if test="college != null and college != ''">
             and college=#{college}
         </if>
-        <if test="sampleName != null and sampleName != ''">
+        <if test="workType != null and workType != ''">
             and work_type=#{workType}
         </if>
-        <if test="sampleName != null and sampleName != ''">
-            and major=#{major}
+        <if test="major != null and major != ''">
+            and major like #{major}"%"
         </if>
-        <if test="sampleName != null and sampleName != ''">
-            and work_cities=#{workCities}
+        <if test="workCities != null and workCities != ''">
+            and work_cities like #{workCities}"%"
         </if>
-        ORDER BY graduation_year DESC
+        <if test="graduationYear != null and graduationYear != ''">
+            and graduation_year = #{graduationYear}
+        </if>
+        <if test="graduationYear != null and graduationYear != ''">
+            and graduation_year = #{graduationYear}
+        </if>
+        ORDER BY id desc
         <if test="limit != null and limit != '' ">
             limit #{page} , #{limit}
         </if>
     </select>
 
-    <select id="selecyIdList" resultType="com.GUFL_kongliang.entity.Register">
-        select <include refid="Base_Column_List"/>
+    <select id="selecyIdList" resultType="com.GUFL_kongliang.entity.Register" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
         from register
         where id in
-            <foreach collection="idList" item="id" index="i" open="(" close=")" separator=",">
-                #{id}
-            </foreach>
+        <foreach collection="idList" item="id" index="i" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        ORDER BY id desc
     </select>
 
     <select id="selectByIda" resultType="com.GUFL_kongliang.entity.Register">
-        select * from register where id=#{id}
+        select *
+        from register
+        where id = #{id}
     </select>
 
 

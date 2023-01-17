@@ -8,7 +8,9 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,19 +30,31 @@ public class RegisterController{
 
 
 
-    @GetMapping("editSave")
+    /** 根据id查询
+     * @Desc:
+     * @Auther: 孔量
+     * @Date: 2023/1/16 11:18
+     * @param: id
+     * @Return: BaseResponse<Register>
+    */
+    @GetMapping("selectById")
     public BaseResponse<Register> selectByida(String id) {
         Register register = registerBiz.selectByIda(id);
         return  new BaseResponse<>(200, "保存成功", register);
     }
 
 
+    /**
+     * @Desc: 修改或添加
+     * @Auther: 孔量
+     * @Date: 2023/1/16 11:18
+     * @param: entity
+     * @Return: BaseResponse<List<Register>>
+    */
     @PostMapping("editSave")
-    public BaseResponse<List<Register>> editSave(@RequestBody Register entity) {
-        registerBiz.editSave(entity);
-        return  new BaseResponse<>(200, "保存成功", null);
+    public BaseResponse<String> editSave(@RequestBody Register entity) {
+        return  new BaseResponse<>(200, registerBiz.editSave(entity), registerBiz.editSave(entity));
     }
-
 
 
     /**
@@ -61,7 +75,6 @@ public class RegisterController{
     }
 
 
-
     /**
      * @Desc:  列表查询
      * @Auther: 孔量
@@ -78,9 +91,8 @@ public class RegisterController{
 
 
 
-
     /**
-     * @Desc: 手写分页
+     * @Desc: 手写分页列表查询
      * @Auther: 孔量
      * @Date: 2023/1/16 9:40
      * @param: entity
@@ -92,12 +104,6 @@ public class RegisterController{
         List<Register> list = (List<Register>) pageLista.get("list");
         return  new BaseResponse<>((Integer) pageLista.get("tol"), "200", list);
     }
-
-    @GetMapping("add")
-    public void getPagLista() {
-        registerBiz.addList();
-    }
-
 
 
 }
