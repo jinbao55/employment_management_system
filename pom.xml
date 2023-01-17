@@ -24,6 +24,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.21</version>
         </dependency>
         <!-- druid -->
         <dependency>
@@ -164,6 +165,7 @@
                     <include>**/*.yml</include>
                     <include>**/*.properties</include>
                     <include>**/*.xml</include>
+                    <include>**</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>
