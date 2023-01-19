@@ -130,4 +130,42 @@
         </foreach>
     </insert>
 
+
+    <select id="selectGraduationYear" resultType="java.lang.Integer">
+        select count(id) from register
+        where
+        deleted =0
+        <if test="year != null and year != ''">
+            and graduation_year <![CDATA[   >  ]]> #{year}
+        </if>
+        <if test="college != null and college != ''">
+            and college=#{college}
+        </if>
+        <if test="major != null and major != ''">
+            and major=#{major}
+        </if>
+        <if test="isWork != null and isWork != ''">
+            and is_work=#{isWork}
+        </if>
+        group by graduation_year
+    </select>
+
+    <select id="workTypeStatistics" resultType="com.GUFL_kongliang.entity.employmentStatisticsCircular">
+        select work_type as name,count(id) as value from register
+        where
+        deleted =0
+        <if test="year != null and year != ''">
+            and graduation_year <![CDATA[   >  ]]> #{year}
+        </if>
+        <if test="college != null and college != ''">
+            and college=#{college}
+        </if>
+        <if test="major != null and major != ''">
+            and major=#{major}
+        </if>
+        <if test="isWork != null and isWork != ''">
+            and is_work=#{isWork}
+        </if>
+        group by work_type
+    </select>
 </mapper>

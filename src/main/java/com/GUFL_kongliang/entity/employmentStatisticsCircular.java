@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,12 +14,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class employmentStatistics implements Serializable {
+public class employmentStatisticsCircular {
     private static final long serialVersionUID = 1L;
 
-    private List<String> x;
+    //数量
+    private Integer value;
 
-    private List<Integer> y;
+    //类型
+    private String name;
 
 }

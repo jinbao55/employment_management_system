@@ -20,5 +20,8 @@
     </sql>
 
 
+    <select id="analysis" resultType="com.GUFL_kongliang.entity.employmentStatisticsCircular">
+        select type as name,count(id) as value from post_information group by type
+    </select>
 
 </mapper>
