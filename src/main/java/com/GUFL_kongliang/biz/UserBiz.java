@@ -40,12 +40,23 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
      * @param: user
      * @Return: void
      */
-    public boolean addUser(User user) {
+    public boolean addAndUpdUser(User user) {
+        String id = user.getId();
+        if(StringUtils.isNotBlank(id)){
+            user.setPassword(Md5Utils.md5Password(user.getPassword()));
+            int i = baseMapper.updateById(user);
+            if(i>0){
+                return true;
+            }else {
+                return false;
+            }
+        }
         user.setId(UUIDUtils.getUUID());
         user.setCrtTime(new Date());
         user.setPassword(Md5Utils.md5Password(user.getPassword()));
-        boolean save = save(user);
-        return save;
+        user.setDeleted(0);
+        user.setState("1");
+        return save(user);
     }
 
 
@@ -142,4 +153,63 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
         return this.baseMapper.selectList(wrapper);
     }
 
+    /**
+     * @Desc:  编辑用户
+     * @Auther: 孔量
+     * @Date: 2023/1/29 21:38
+     * @param: user
+     * @Return: void
+    */
+    public int updUser(User user) {
+        return baseMapper.updateById(user);
+
+    }
+
+    /**
+     * @Desc:  删除用户
+     * @Auther: 孔量
+     * @Date: 2023/1/29 22:07
+     * @param: id
+     * @Return: int
+    */
+    public int deleteUser(String id) {
+        return baseMapper.deleteById(id);
+    }
+
+
+    /**
+     * @Desc:  重置为通用密码
+     * @Auther: 孔量
+     * @Date: 2023/1/29 22:24
+     * @param: id
+     * @Return: int
+    */
+    public int resetPassword(User user) {
+        user.setPassword(Md5Utils.md5Password("123456"));
+        return baseMapper.updateById(user);
+    }
+
+    /**
+     * @Desc:  退出登录
+     * @Auther: 孔量
+     * @Date: 2023/1/30 16:05
+     * @param: token
+     * @Return: boolean
+    */
+    public boolean loginout(String token) {
+        System.out.println(token);
+        Boolean aBoolean = redisUtils.deleteKey(token);
+        return aBoolean;
+    }
+
+    /**
+     * @Desc: 修改用户状态
+     * @Auther: 孔量
+     * @Date: 2023/1/30 17:35
+     * @param: user
+     * @Return: void
+    */
+    public void updateUserstate(User user) {
+        baseMapper.updateById(user);
+    }
 }

@@ -96,18 +96,19 @@ public class RedisUtils {
 
 
     /**
-     * @author 孔量
-     * @date 2022/5/5 15:46
      * @param key
      * @return void
+     * @author 孔量
+     * @date 2022/5/5 15:46
      * @Desc 删除key值
      */
-    public void deleteKey(String key) {
+    public Boolean deleteKey(String key) {
         try {
-            redisTemplate.delete(key);
+            return redisTemplate.delete(key);
         }catch (Exception e){
             log.error("Redis删除key，key为:{}报错：",key,e);
         }
+        return null;
     }
 
     /**

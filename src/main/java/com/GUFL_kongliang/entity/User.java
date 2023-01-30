@@ -51,7 +51,7 @@ public class User implements Serializable {
 	  //用户类型
 
     @Column(name = "type")
-    private Integer type;
+    private String type;
 	
 	  //图片地址
 
@@ -67,6 +67,11 @@ public class User implements Serializable {
 
     @Column(name = "college")
     private String college;
+
+
+    //专业
+    @Column(name = "major")
+    private String major;
 	
 	  //班级
 

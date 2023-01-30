@@ -7,6 +7,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @desc：token校验类
@@ -33,12 +34,14 @@ public class TokenInterceptor implements HandlerInterceptor {
             Object value =  redisUtils.getValue(token);
 
             if (value!=null) {
+                //刷新token有效时间
+                redisUtils.setValue(token,value,15, TimeUnit.MINUTES);
                 return true;
             }
             // 拦截请求
-            throw new NingException(500, "token无效");
+            throw new NingException(505, "token无效,请重新登录");
         }
         //拦截请求
-        throw new NingException(500, "token为空");
+        throw new NingException(506, "请登录");
     }
 }

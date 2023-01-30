@@ -11,7 +11,9 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,12 +40,12 @@ public class UserController {
      * @Return: void
      */
     @PostMapping("register")
-    public BaseResponse register(@RequestBody User user) {
-        boolean flag = userBiz.addUser(user);
+    public BaseResponse addAndUpdUser(@RequestBody User user) {
+        boolean flag = userBiz.addAndUpdUser(user);
         if (flag) {
-            return new BaseResponse<>(200, "Success", "注册成功");
+            return new BaseResponse<>(200, "保存成功", "保存成功");
         } else {
-            return new BaseResponse<>(500, "false", "注册失败");
+            return new BaseResponse<>(500, "保存失败", "保存失败");
         }
     }
 
@@ -59,15 +61,22 @@ public class UserController {
     @PostMapping("toLogin")
     public BaseResponse toLogin(@RequestBody User user) {
         List<User> users = userBiz.toLogin(user);
+        if(Objects.isNull(users)||users.size()<1) {
+            return new BaseResponse<>(500, "false", "账号或密码错误");
+        }
+        User entity = users.get(0).setPassword("");
         if (users.size()==1) {
             String toKen = UUIDUtils.getUUID();
             //token有效时间为15分钟
             redisUtils.setValue(toKen,users,15, TimeUnit.MINUTES);
-            users.get(0).setPassword("");
-            return new BaseResponse<>(200, toKen, users.get(0));
+            if(entity.getState().equals("0")){
+                return new BaseResponse<>(500, "false", "账号已冻结，请联系管理员处理");
+            }
+            return new BaseResponse<>(200, toKen, entity);
         } else if(users.size()>1){
             return new BaseResponse<>(500, "false", "系统错误");
-        }else {
+        }
+        else {
             return new BaseResponse<>(500, "false", "账号或密码错误");
         }
     }
@@ -102,6 +111,13 @@ public class UserController {
     }
 
 
+    /**
+     * @Desc:  获取用户列表
+     * @Auther: 孔量
+     * @Date: 2023/1/29 21:09
+     * @param: entity
+     * @Return: BaseResponse
+    */
     @PostMapping("getPageList")
     public BaseResponse getPageList(@RequestBody User entity) {
         com.github.pagehelper.Page<Object> result = PageHelper.startPage(entity.getPage() == null ? 1 : entity.getPage(), entity.getLimit() == null ? 10 : entity.getLimit());
@@ -109,5 +125,90 @@ public class UserController {
         return new BaseResponse<>((int) result.getTotal(), "200", pageList);
     }
 
+    /**
+     * @Desc:  编辑用户
+     * @Auther: 孔量
+     * @Date: 2023/1/29 21:36
+     * @param: entity
+     * @Return: BaseResponse
+    */
+    @PostMapping("updUser")
+    public BaseResponse updUser(@RequestBody User user) {
+        int i = userBiz.updUser(user);
+        if(i>0){
+            return new BaseResponse<>(200, "保存成功", "保存成功");
+        }else {
+            return new BaseResponse<>(500, "保存失败", "保存失败");
+        }
+    }
+
+
+    /**
+     * @Desc:  删除用户
+     * @Auther: 孔量
+     * @Date: 2023/1/29 22:06
+     * @param: null
+     * @Return: null
+    */
+    @PostMapping("deleteUser")
+    public BaseResponse deleteUser(@RequestBody String id) {
+        int i = userBiz.deleteUser(id);
+        if(i>0){
+            return new BaseResponse<>(200, "删除成功", "保存成功");
+        }else {
+            return new BaseResponse<>(500, "删除失败", "保存失败");
+        }
+    }
+
+
+
+    /**
+     * @Desc:  重置密码
+     * @Auther: 孔量
+     * @Date: 2023/1/29 22:21
+     * @param: id
+     * @Return: BaseResponse
+    */
+    @PostMapping("resetPassword")
+    public BaseResponse resetPassword(@RequestBody User user) {
+        int i = userBiz.resetPassword(user);
+        if(i>0){
+            return new BaseResponse<>(200, "重置成功", "保存成功");
+        }else {
+            return new BaseResponse<>(500, "重置失败", "保存失败");
+        }
+    }
+
+
+    /**
+     * @Desc: 退出登录
+     * @Auther: 孔量
+     * @Date: 2023/1/30 16:06
+     * @param: token
+     * @Return: BaseResponse
+    */
+    @PostMapping("loginout")
+    public BaseResponse loginout(@RequestBody String token){
+        boolean loginout = userBiz.loginout(token);
+        if(loginout){
+            return new BaseResponse<>(200, "已退出登录", "成功");
+        }else {
+            return new BaseResponse<>(500, "失败", "失败");
+        }
+    }
+
+
+    /**
+     * @Desc:  修改用户状态
+     * @Auther: 孔量
+     * @Date: 2023/1/30 17:16
+     * @param: token
+     * @Return: BaseResponse
+    */
+    @PostMapping("updateUserstate")
+    public BaseResponse updateUserstate(@RequestBody User user){
+        userBiz.updateUserstate(user);
+        return new BaseResponse<>(200, "成功", "成功");
+    }
 
 }

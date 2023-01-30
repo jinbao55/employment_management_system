@@ -37,10 +37,13 @@ class GuflKongliangApplicationTests {
 
         //    redisUtils.setValue("kl","杨幂",1000, TimeUnit.MINUTES);
 
-        redisUtils.deleteKey("ym");
+        String s="eda2679095574999ac37eeca3fadd09f";
+
+        redisUtils.deleteKey(s);
 
 
     }
+
 
 
 

@@ -1,10 +1,14 @@
 package com.GUFL_kongliang.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @desc：web 拦截器
@@ -23,17 +27,25 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        // 配置自定义拦截器，使其生效，并且放行登陆请求
-//        registry.addInterceptor(tokenInterceptor)
-//                //拦截的地址
-//                .addPathPatterns("/**")
-//                //放行的地址
-//                .excludePathPatterns("/user/toLogin");
+        List<String> excludePath = new ArrayList<>();
+        //排除拦截，除了注册登录(此时还没token)，其他都拦截
+        excludePath.add("/user/**");     //注册
+        excludePath.add("/static/**");  //静态资源
+        excludePath.add("/assets/**");  //静态资源
+        excludePath.add("/error");//放行报错
+
+
+        registry.addInterceptor(tokenInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(excludePath);
     }
 
-    /**
-     * 解决因前后端的端口不一致导致的跨域问题
-     */
+
+
+
+        /**
+         * 解决因前后端的端口不一致导致的跨域问题
+         */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
