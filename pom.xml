@@ -107,6 +107,15 @@
         </dependency>
 
 
+
+        <!--验证码-->
+        <dependency>
+            <groupId>com.ramostear</groupId>
+            <artifactId>Happy-Captcha</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
+
     </dependencies>
 
 

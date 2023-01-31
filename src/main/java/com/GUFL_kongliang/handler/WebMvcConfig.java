@@ -29,7 +29,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> excludePath = new ArrayList<>();
         //排除拦截，除了注册登录(此时还没token)，其他都拦截
-        excludePath.add("/user/**");     //注册
+        excludePath.add("/user/captcha");     //注册
+        excludePath.add("/user/toLogin");
         excludePath.add("/static/**");  //静态资源
         excludePath.add("/assets/**");  //静态资源
         excludePath.add("/error");//放行报错

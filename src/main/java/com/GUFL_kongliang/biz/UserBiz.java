@@ -1,6 +1,5 @@
 package com.GUFL_kongliang.biz;
 
-import com.GUFL_kongliang.entity.RecruitmentInformation;
 import com.GUFL_kongliang.entity.User;
 import com.GUFL_kongliang.handler.NingException;
 import com.GUFL_kongliang.mapper.UserMapper;
@@ -9,12 +8,12 @@ import com.GUFL_kongliang.utils.RedisUtils;
 import com.GUFL_kongliang.utils.UUIDUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,6 +30,11 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
 
     @Autowired
     RedisUtils redisUtils;
+
+
+    @Autowired
+    VerificationBiz verificationBiz;
+
 
 
     /**
@@ -68,6 +72,11 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
      * @Return: boolean
      */
     public List<User> toLogin(User user) {
+
+
+
+
+
         HashMap<String, Object> loginMap = new HashMap<>();
         loginMap.put("login_Name", user.getLoginName());
         loginMap.put("password", Md5Utils.md5Password(user.getPassword()));

@@ -119,6 +119,11 @@ public class User implements Serializable {
     private transient  String newPasswordRe;
 
 
+    //验证码
+    @Transient
+    private transient  String code;
+
+
     @Transient
     private transient Integer page;
 
