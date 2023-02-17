@@ -44,7 +44,7 @@ public class UserController {
     VerificationBiz verificationBiz;
 
 
-    String code = "";
+
 
     /**
      * @Desc: 用户注册
@@ -234,6 +234,7 @@ public class UserController {
      * @param: response
      * @Return: void
      */
+    String code = "";
     @GetMapping("/captcha")
     public void happyCaptcha(HttpServletRequest reqeust, HttpServletResponse response) {
         HappyCaptcha.require(reqeust, response)
@@ -247,5 +248,15 @@ public class UserController {
         verificationBiz.removeCaptcha(reqeust);
     }
 
+    /**
+     * @Desc:  返回验证码到前端校验
+     * @Auther: 孔量
+     * @Date: 2023/1/31 16:14
+     * @Return: String
+    */
+    @GetMapping("/getCode")
+    public String getCode() {
+        return code;
+    }
 
 }

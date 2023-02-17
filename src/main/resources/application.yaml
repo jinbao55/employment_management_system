@@ -37,3 +37,13 @@ pagehelper:
   helper-dialect: mysql
   reasonable: true
   support-methods-arguments: true
+
+
+aliyun:
+  oss:
+    file:
+      endpoint: oss-cn-hangzhou.aliyuncs.com
+      keyid: LTAI5tSqeB6FCtpKaA67gcfJ
+      keysecret: yV3YNRDethGC0O8OiaqwWeTcwvtFZQ
+      bucketname: kongliang-test
+      filehost: active
