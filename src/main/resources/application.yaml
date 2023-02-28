@@ -18,6 +18,9 @@ spring:
     password: klklKL889
     database: 0
 
+logging:
+  level:
+    com.app.mapper: debug
 
 
 #mybatis-plus

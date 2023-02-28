@@ -8,43 +8,44 @@ import com.GUFL_kongliang.utils.UUIDUtils;
 import com.github.javafaker.Address;
 import com.github.javafaker.Company;
 import com.github.javafaker.Faker;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 class GuflKongliangApplicationTests {
 
-    @Autowired
-    private RedisUtils redisUtils;
 
 
-    @Autowired
-    RegisterMapper registerMapper;
-
-    @Test
-    void contextLoads() {
-        String s = Md5Utils.md5Password("kl");
-        System.out.println(s);
-    }
+    private static  ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("LogAspect-saveLogInfo-pool-%d").build();
+    private static  ThreadPoolExecutor executor = new ThreadPoolExecutor(3, 5, 0L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>(1024), threadFactory, new ThreadPoolExecutor.AbortPolicy());
 
 
-    @Test
-    void redistest() {
+    public static void main(String[] args) {
 
-        //    redisUtils.setValue("kl","杨幂",1000, TimeUnit.MINUTES);
-
-        String s="eda2679095574999ac37eeca3fadd09f";
-
-        redisUtils.deleteKey(s);
-
+        for (int i = 0; i < 15; i++) {
+            executor.execute(new SubThread());
+        }
+        System.out.println("qqq");
 
     }
 
 
+    private static class SubThread implements Runnable {
+
+        @Override
+        public void run() {
+            System.out.println(Thread.currentThread().getState()+"----------"+Thread.currentThread().getName());
+        }
+    }
 
 
 
