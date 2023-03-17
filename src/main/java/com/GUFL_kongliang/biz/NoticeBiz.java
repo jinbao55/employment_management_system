@@ -82,9 +82,9 @@ public class NoticeBiz extends ServiceImpl<NoticeMapper, Notice> {
      * @Return: Integer
     */
     public Integer setShow(String id) {
-        log.info(id);
+        //修改其他通知为非展示状态
         baseMapper.setNoShow();
-
+        //将本条信息修改为展示状态
       return baseMapper.setShow(id);
     }
 }

@@ -126,8 +126,7 @@ public class RegisterBiz extends ServiceImpl<RegisterMapper, Register> {
     }
 
     public HashMap<String, Object> getPage(HashMap selectMap) {
-
-        //count
+        //查找出相应列表数量
         Integer tol = baseMapper.count(selectMap);
         if(tol==0) {
             HashMap<String, Object> objectObjectHashMap = new HashMap<>();
@@ -135,16 +134,13 @@ public class RegisterBiz extends ServiceImpl<RegisterMapper, Register> {
             objectObjectHashMap.put("list", new ArrayList<>());
             return objectObjectHashMap;
         }
-        //找id
+        //找出对应数据id
         List<String> idList = baseMapper.selecyId(selectMap);
-        //in id
+        //根据id过得数据
         List<Register> list = baseMapper.selecyIdList(idList);
-
         HashMap<String, Object> hashMap = new HashMap<>();
-
         hashMap.put("tol", tol);
         hashMap.put("list", list);
-
         return hashMap;
     }
 

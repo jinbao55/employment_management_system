@@ -19,41 +19,5 @@
         id, registrant, registration_date, professional_compliance, wages, company_type, city, work_unit, work_place
     </sql>
 
-    <select id="getList" resultMap="employmentRegistrationMap" parameterType="map">
-        select
-        <include refid="Base_Column_List" />
-        from
-        employment_registration
-        <where>
-        <if test="id != null and id != ''">
-            and id = #{id}
-        </if>
-        <if test="registrant != null and registrant != ''">
-            and registrant = #{registrant}
-        </if>
-        <if test="registrationDate != null and registrationDate != ''">
-            and registration_date = #{registrationDate}
-        </if>
-        <if test="professionalCompliance != null and professionalCompliance != ''">
-            and professional_compliance = #{professionalCompliance}
-        </if>
-        <if test="wages != null and wages != ''">
-            and wages = #{wages}
-        </if>
-        <if test="companyType != null and companyType != ''">
-            and company_type = #{companyType}
-        </if>
-        <if test="city != null and city != ''">
-            and city = #{city}
-        </if>
-        <if test="workUnit != null and workUnit != ''">
-            and work_unit = #{workUnit}
-        </if>
-        <if test="workPlace != null and workPlace != ''">
-            and work_place = #{workPlace}
-        </if>
-        </where>
-        order by crt_time desc
-    </select>
 
 </mapper>

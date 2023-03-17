@@ -72,11 +72,6 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
      * @Return: boolean
      */
     public List<User> toLogin(User user) {
-
-
-
-
-
         HashMap<String, Object> loginMap = new HashMap<>();
         loginMap.put("login_Name", user.getLoginName());
         loginMap.put("password", Md5Utils.md5Password(user.getPassword()));

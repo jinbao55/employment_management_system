@@ -5,6 +5,7 @@ import com.GUFL_kongliang.entity.employmentStatisticsCircular;
 import com.GUFL_kongliang.mapper.PostInformationMapper;
 import com.GUFL_kongliang.mapper.RegisterMapper;
 import com.GUFL_kongliang.utils.RedisUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -135,7 +136,7 @@ public class EmploymentStatisticsBiz{
         String year = map.get("year");
         String key= "workTypeStatistics"+year;
         List<employmentStatisticsCircular> value = (List<employmentStatisticsCircular>) redisUtils.getValue(key);
-        if(Objects.nonNull(value)){
+        if(Objects.nonNull(value)&& StringUtils.isBlank(map.get("college"))&&StringUtils.isBlank(map.get("major"))){
             log.info("就业类型统计-缓存："+year);
             return value;
         }

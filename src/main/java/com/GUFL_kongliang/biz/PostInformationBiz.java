@@ -34,11 +34,9 @@ public class PostInformationBiz extends ServiceImpl<PostInformationMapper, PostI
      * @Return: List<PostInformation>
     */
     public List<PostInformation> getPageList(PostInformation entity) {
-
         String name = entity.getName();
         String type = entity.getType();
         String place = entity.getPlace();
-
         QueryWrapper<PostInformation> wrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(name)) {
             wrapper.like("name", "%" + name + "%");
@@ -52,12 +50,10 @@ public class PostInformationBiz extends ServiceImpl<PostInformationMapper, PostI
         wrapper.orderByDesc("updtime");
         return this.baseMapper.selectList(wrapper);
     }
-
     public void editSave(PostInformation entity) {
         entity.setUpdtime(new Date());
         entity.setDeleted(0);
         String id = entity.getId();
-
         if(StringUtils.isBlank(id)){
             //添加
             baseMapper.insert(entity);

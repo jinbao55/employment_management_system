@@ -107,10 +107,8 @@ public class UserController {
      */
     @PostMapping("updateUser")
     public BaseResponse updateUser(@RequestBody User user) {
-
         String newPassword = user.getNewPassword();
         String newPasswordRe = user.getNewPasswordRe();
-
         if (StringUtils.isEmpty(newPassword) || StringUtils.isEmpty(newPasswordRe)) {
             throw new NingException(400, "新密码和再次输入密码都不能为空");
         }

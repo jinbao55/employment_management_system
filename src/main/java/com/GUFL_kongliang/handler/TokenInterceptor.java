@@ -21,27 +21,28 @@ public class TokenInterceptor implements HandlerInterceptor {
     RedisUtils redisUtils;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 放行浏览器的预检请求
-        if (request.getMethod().equals("OPTIONS")) {
-            return true;
-        }
-        // 获取请求头中携带的token值
-        String token = request.getHeader("Authorization");
-        // token验证
-        if(token!=null) {
-
-            Object value =  redisUtils.getValue(token);
-
-            if (value!=null) {
-                //刷新token有效时间
-                redisUtils.setValue(token,value,15, TimeUnit.MINUTES);
-                return true;
-            }
-            // 拦截请求
-            throw new NingException(505, "token无效,请重新登录");
-        }
-        //拦截请求
-        throw new NingException(506, "请登录");
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+//        // 放行浏览器的预检请求
+//        if (request.getMethod().equals("OPTIONS")) {
+//            return true;
+//        }
+//        // 获取请求头中携带的token值
+//        String token = request.getHeader("Authorization");
+//        // token验证
+//        if(token!=null) {
+//
+//            Object value =  redisUtils.getValue(token);
+//
+//            if (value!=null) {
+//                //刷新token有效时间
+//                redisUtils.setValue(token,value,15, TimeUnit.MINUTES);
+//                return true;
+//            }
+//            // 拦截请求
+//            throw new NingException(505, "token无效,请重新登录");
+//        }
+//        //拦截请求
+//        throw new NingException(506, "请登录");
+        return true;
     }
 }

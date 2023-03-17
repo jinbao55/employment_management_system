@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,6 @@ public class MenuBiz extends ServiceImpl<MenuMapper, Menu> {
     */
     public List<MenuDto> getMenu(User user) {
         List<MenuDto> menuDtos = "管理员".equals(user.getType()) ? menuMapper.getAdminMenu() : menuMapper.getMenu();
-
         List<MenuDto> ones = menuDtos.stream()
                 .filter(e -> StringUtils.isBlank(e.getHasThird()))
                 .collect(Collectors.toList());
@@ -71,7 +71,6 @@ public class MenuBiz extends ServiceImpl<MenuMapper, Menu> {
             }
             one.setMenus(menus);
         }
-
         return ones;
     }
 
@@ -84,6 +83,8 @@ public class MenuBiz extends ServiceImpl<MenuMapper, Menu> {
      * @Return: void
     */
     public void editSave(Menu entity) {
+        entity.setCrtTime(new Date());
+        entity.setDeleted(0);
         saveOrUpdate(entity);
     }
 
