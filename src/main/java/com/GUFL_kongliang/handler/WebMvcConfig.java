@@ -1,7 +1,6 @@
 package com.GUFL_kongliang.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -31,6 +30,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         //排除拦截，除了注册登录(此时还没token)，其他都拦截
         excludePath.add("/user/captcha");     //注册
         excludePath.add("/user/toLogin");
+        excludePath.add("/user/getCode");
         excludePath.add("/static/**");  //静态资源
         excludePath.add("/assets/**");  //静态资源
         excludePath.add("/error");//放行报错

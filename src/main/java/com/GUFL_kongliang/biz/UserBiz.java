@@ -9,15 +9,16 @@ import com.GUFL_kongliang.utils.UUIDUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.*;
 
 
 /**
@@ -35,6 +36,10 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
     @Autowired
     VerificationBiz verificationBiz;
 
+
+
+    @Autowired
+    EmploymentStatisticsBiz employmentStatisticsBiz;
 
 
     /**
@@ -79,6 +84,23 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
         if (CollectionUtils.isEmpty(users)) {
             return new ArrayList<>();
         }
+
+        /**
+         * @Desc:  登录后异步加载就业统计菜单，提升相应速度
+        */
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("redisOperate-%d").build();
+        ExecutorService executor = new ThreadPoolExecutor(1, 9, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<>(1024), threadFactory, new ThreadPoolExecutor.AbortPolicy());
+        CompletableFuture.runAsync(() -> {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("year","2013");
+            employmentStatisticsBiz.workNumber(map);
+            employmentStatisticsBiz.numberOfGraduates(map);
+            employmentStatisticsBiz.noWork(map);
+            employmentStatisticsBiz.workTypeStatistics(map);
+            employmentStatisticsBiz.cooperativeCompanies();
+        }, executor);
+        executor.shutdown();
         return users;
     }
 
@@ -194,16 +216,21 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
     }
 
     /**
-     * @Desc:  退出登录
+     * @Desc:  退出登录清楚token
      * @Auther: 孔量
      * @Date: 2023/1/30 16:05
      * @param: token
      * @Return: boolean
     */
-    public boolean loginout(String token) {
-        System.out.println(token);
-        Boolean aBoolean = redisUtils.deleteKey(token);
-        return aBoolean;
+    public void loginout(String token) {
+        //异步操作Redis
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("redisOperate-%d").build();
+        ExecutorService executor = new ThreadPoolExecutor(1, 9, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<>(1024), threadFactory, new ThreadPoolExecutor.AbortPolicy());
+        CompletableFuture.runAsync(() -> {
+            redisUtils.deleteKey(token);
+        }, executor);
+        executor.shutdown();
     }
 
     /**

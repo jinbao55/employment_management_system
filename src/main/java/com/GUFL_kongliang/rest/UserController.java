@@ -9,6 +9,7 @@ import com.GUFL_kongliang.utils.RedisUtils;
 import com.GUFL_kongliang.utils.UUIDUtils;
 import com.alibaba.druid.util.StringUtils;
 import com.github.pagehelper.PageHelper;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.ramostear.captcha.HappyCaptcha;
 import com.ramostear.captcha.support.CaptchaStyle;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static com.ramostear.captcha.HappyCaptcha.SESSION_KEY;
 import static com.ramostear.captcha.support.CaptchaType.ARITHMETIC_ZH;
@@ -73,8 +73,8 @@ public class UserController {
      */
     @PostMapping("toLogin")
     public BaseResponse toLogin(@RequestBody User user) {
-        String code = user.getCode();
-        if (!this.code.equals(code)) {
+        String code = (String) redisUtils.getValue("code");
+        if (!user.getCode().equals(code)) {
             return new BaseResponse<>(500, "false", "验证码错误");
         }
         List<User> users = userBiz.toLogin(user);
@@ -201,12 +201,8 @@ public class UserController {
      */
     @PostMapping("loginout")
     public BaseResponse loginout(@RequestBody String token) {
-        boolean loginout = userBiz.loginout(token);
-        if (loginout) {
-            return new BaseResponse<>(200, "已退出登录", "成功");
-        } else {
-            return new BaseResponse<>(500, "失败", "失败");
-        }
+        userBiz.loginout(token);
+        return new BaseResponse<>(200, "已退出登录", "成功");
     }
 
 
@@ -232,7 +228,7 @@ public class UserController {
      * @param: response
      * @Return: void
      */
-    String code = "";
+
     @GetMapping("/captcha")
     public void happyCaptcha(HttpServletRequest reqeust, HttpServletResponse response) {
         HappyCaptcha.require(reqeust, response)
@@ -242,8 +238,19 @@ public class UserController {
                 .width(220)                            //设置动画宽度为220
                 .height(80)                            //设置动画高度为80
                 .build().finish();                  //生成并输出验证码;
-        code = (String) reqeust.getSession().getAttribute(SESSION_KEY);
-        verificationBiz.removeCaptcha(reqeust);
+        String code = (String) reqeust.getSession().getAttribute(SESSION_KEY);
+
+        //异步操作Redis
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("redisOperate-%d").build();
+        ExecutorService executor = new ThreadPoolExecutor(3, 9, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<>(1024), threadFactory, new ThreadPoolExecutor.AbortPolicy());
+        CompletableFuture.runAsync(() -> {
+            redisUtils.deleteKey("code");
+            redisUtils.setValue("code",code,2, TimeUnit.MINUTES);
+        }, executor);
+        executor.shutdown();
+        //流输出图片
+    verificationBiz.removeCaptcha(reqeust);
     }
 
     /**
@@ -252,9 +259,9 @@ public class UserController {
      * @Date: 2023/1/31 16:14
      * @Return: String
     */
-    @GetMapping("/getCode")
-    public String getCode() {
-        return code;
+    @PostMapping("/getCode")
+    public String getCode(){
+        return (String) redisUtils.getValue("code");
     }
 
 }
