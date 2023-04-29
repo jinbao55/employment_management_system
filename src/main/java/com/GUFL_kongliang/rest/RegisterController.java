@@ -1,18 +1,17 @@
 package com.GUFL_kongliang.rest;
 
 import com.GUFL_kongliang.biz.RegisterBiz;
-import com.GUFL_kongliang.entity.Recruit;
 import com.GUFL_kongliang.entity.Register;
+import com.GUFL_kongliang.handler.TokenInterceptor;
 import com.GUFL_kongliang.utils.BaseResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.testng.annotations.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 就业登记
@@ -28,6 +27,8 @@ public class RegisterController{
     RegisterBiz registerBiz;
 
 
+    @Autowired
+    TokenInterceptor tokenInterceptor;
 
 
     /** 根据id查询
@@ -53,6 +54,14 @@ public class RegisterController{
     */
     @PostMapping("editSave")
     public BaseResponse<String> editSave(@RequestBody Register entity) {
+        Map<String, String> operationUser = tokenInterceptor.getOperationUser();
+        if("学生".equals(operationUser.get("type"))){
+            String name = entity.getName();
+            String user = operationUser.get("user");
+            if(!user.equals(name)){
+                return  new BaseResponse<>(500, "修改失败,您只能修改自己的数据", null);
+            }
+        }
         return  new BaseResponse<>(200, registerBiz.editSave(entity), registerBiz.editSave(entity));
     }
 
@@ -66,6 +75,10 @@ public class RegisterController{
     */
     @PostMapping("delete")
     public BaseResponse<List<Register>> delete(@RequestBody String id) {
+        Map<String, String> operationUser = tokenInterceptor.getOperationUser();
+        if("学生".equals(operationUser.get("type"))){
+            return  new BaseResponse<>(500, "删除失败,您没有权限", null);
+        }
         Integer i = registerBiz.delete(id);
         if(i>0){
             return  new BaseResponse<>(200, "删除成功"+i+"条数据", null);

@@ -3,15 +3,15 @@ package com.GUFL_kongliang.biz;
 import com.GUFL_kongliang.entity.Register;
 import com.GUFL_kongliang.mapper.RegisterMapper;
 import com.GUFL_kongliang.utils.SnowflakeIdWorker;
-import com.GUFL_kongliang.utils.UUIDUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.javafaker.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -56,7 +56,6 @@ public class RegisterBiz extends ServiceImpl<RegisterMapper, Register> {
             return "修改成功";
         }
     }
-
     /**
      * @Desc: 删除
      * @Auther: 孔量
