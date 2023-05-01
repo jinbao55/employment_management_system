@@ -211,7 +211,7 @@ public class UserBiz extends ServiceImpl<UserMapper, User> {
      * @Return: int
     */
     public int resetPassword(User user) {
-        user.setPassword(Md5Utils.md5Password("123456"));
+        user.setPassword(Md5Utils.md5Password("e10adc3949ba59abbe56e057f20f883e"));
         return baseMapper.updateById(user);
     }
 
